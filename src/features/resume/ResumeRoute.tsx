@@ -18,7 +18,7 @@ export function Component() {
   )
 
   return (
-    <article className="route-content">
+    <main id="main" tabIndex={-1} className="route-content">
       <h1>Résumé</h1>
       <p>
         {profile.name} · {profile.title}
@@ -58,6 +58,6 @@ export function Component() {
         </dl>
       </section>
       <ContactSection includeResume={false} />
-    </article>
+    </main>
   )
 }

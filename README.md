@@ -2,7 +2,7 @@
 
 A portfolio for software engineering and full-stack internship applications in Sri Lanka from January 2027. Visitors can read project case studies, explore skills and experience, download a résumé, and get in touch.
 
-**Status:** The current build is a functional preview of the content and navigation. The Figma visual implementation and motion are pending access to the Make export. There is no published site URL.
+**Status:** The local build uses the Figma Make export for its layout, assets, and motion. There is no published site URL.
 
 ## Design source
 
@@ -36,7 +36,7 @@ For browser tests, run `npx playwright install chromium` once, then `npm run bui
 
 ## Architecture
 
-The app uses React, strict TypeScript, Vite, React Router, and plain CSS. The portfolio reads its content from typed local modules and runs as a static site. Each feature owns its local state: a visitor’s skills selection and open menu do not require a global store. Project and résumé routes load on demand.
+The app uses React, strict TypeScript, Vite, React Router, Tailwind CSS, and native CSS and SVG. The portfolio reads its content from typed local modules and runs as a static site. Each feature owns its local state: a visitor’s skills selection and open menu do not require a global store. Project and résumé routes load on demand.
 
 | Path              | Responsibility                                                  |
 | ----------------- | --------------------------------------------------------------- |
@@ -63,8 +63,8 @@ The [architecture notes](docs/architecture.md) explain the route, state, and hos
 
 [GitHub Actions](.github/workflows/quality.yml) runs formatting, linting, type checking, Vitest, a production build, a dependency audit, and Playwright with accessibility checks on pull requests and pushes to `main`. [Dependabot](.github/dependabot.yml) checks npm packages and GitHub Actions for updates.
 
-The app uses system fonts, local assets, and lazy detail routes to limit initial requests. No field performance measurements have been collected. Semantic landmarks, a skip link, visible focus, keyboard navigation, and a text résumé provide ways to use the portfolio across viewport sizes. Automated accessibility checks complement manual review.
+The app uses locally bundled fonts and assets, and lazy detail routes to limit initial requests. No field performance measurements have been collected. Semantic landmarks, a skip link, visible focus, keyboard navigation, and a text résumé provide ways to use the portfolio across viewport sizes. Automated accessibility checks complement manual review.
 
 [Vercel configuration](vercel.json) is included for an eventual static deployment. Follow the [deployment guide](docs/deployment.md) after the design and release review. Until then, the site requests that search engines skip indexing.
 
-For an interview, start with the [walkthrough](docs/interview-walkthrough.md). The next priorities are the Figma port, visual comparison across viewport sizes, and a verified production URL.
+For an interview, start with the [walkthrough](docs/interview-walkthrough.md). The next priorities are visual comparison across viewport sizes and release review.

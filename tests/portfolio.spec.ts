@@ -5,14 +5,14 @@ test('opens a case study from the homepage and preserves browser history', async
   page,
 }) => {
   await page.goto('/')
-  await page.getByRole('link', { name: 'Explore projects' }).click()
-  await expect(page).toHaveURL(/\/#projects$/)
-  const projects = page.getByRole('heading', { name: 'Featured projects' })
-  await expect(projects).toBeFocused()
+  await page.locator('a.button-primary[href="#work"]').click()
+  await expect(page).toHaveURL(/\/#work$/)
+  const projects = page.locator('#work')
+  await expect(projects).toBeInViewport()
 
   await page
     .getByRole('article', { name: 'TradeSphere' })
-    .getByRole('link', { name: /^Read case study/ })
+    .getByRole('link', { name: /^View case study/ })
     .click()
   await expect(page).toHaveURL(/\/projects\/tradesphere$/)
   await expect(page).toHaveTitle('TradeSphere | Minura Ranaweera')
@@ -20,7 +20,7 @@ test('opens a case study from the homepage and preserves browser history', async
     page.getByRole('heading', { level: 1, name: 'TradeSphere' }),
   ).toBeVisible()
   await expect(
-    page.getByRole('link', { name: /View TradeSphere on GitHub/ }),
+    page.getByRole('link', { name: /Explore source on GitHub/ }),
   ).toHaveAttribute('href', 'https://github.com/minuraDinupriya/tradesphere')
 
   await page.goBack()
@@ -42,11 +42,11 @@ test('loads a deep link on refresh and handles an unknown case study', async ({
 
   await page.goto('/projects/not-a-project')
   await expect(
-    page.getByRole('heading', { name: 'Page not found' }),
+    page.getByRole('heading', { name: /This route left/ }),
   ).toBeVisible()
-  await page.getByRole('link', { name: 'Return to the portfolio' }).click()
+  await page.getByRole('link', { name: 'Return to portfolio' }).click()
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Minura Ranaweera' }),
+    page.getByRole('heading', { level: 1, name: /Minura\s*Ranaweera/i }),
   ).toBeVisible()
 })
 
@@ -89,29 +89,24 @@ test('the narrow-screen menu opens with the keyboard, closes with Escape, and na
   )
 
   await page.goto('/')
-  const menu = page.getByRole('button', { name: 'Menu', exact: true })
+  const menu = page.getByRole('button', { name: 'Open menu', exact: true })
   const close = page.getByRole('button', { name: 'Close menu' })
-  const navigation = page.getByRole('navigation', { name: 'Primary' })
+  const navigation = page.getByRole('navigation', { name: 'Mobile' })
   await expect(navigation).toBeHidden()
 
   await menu.focus()
   await page.keyboard.press('Enter')
-  await expect(close).toHaveAttribute('aria-expanded', 'true')
-  await page.keyboard.press('Tab')
-  await expect(
-    navigation.getByRole('link', { name: 'About', exact: true }),
-  ).toBeFocused()
+  await expect(menu).toHaveAttribute('aria-expanded', 'true')
+  await expect(close).toBeFocused()
   await page.keyboard.press('Escape')
   await expect(menu).toBeFocused()
   await expect(navigation).toBeHidden()
 
   await page.keyboard.press('Enter')
-  await navigation.getByRole('link', { name: 'Skills', exact: true }).click()
-  await expect(page).toHaveURL(/\/#skills$/)
+  await navigation.getByRole('link', { name: /Expertise/ }).click()
+  await expect(page).toHaveURL(/\/#expertise$/)
   await expect(navigation).toBeHidden()
-  await expect(
-    page.getByRole('heading', { name: 'Skills', exact: true }),
-  ).toBeFocused()
+  await expect(page.locator('#expertise')).toBeFocused()
 })
 
 test('the homepage fits the viewport and passes automated accessibility checks', async ({
@@ -119,7 +114,7 @@ test('the homepage fits the viewport and passes automated accessibility checks',
 }, testInfo) => {
   await page.goto('/')
   await expect(
-    page.getByRole('heading', { level: 1, name: 'Minura Ranaweera' }),
+    page.getByRole('heading', { level: 1, name: /Minura\s*Ranaweera/i }),
   ).toBeVisible()
 
   const hasHorizontalOverflow = await page.evaluate(() => {
@@ -145,4 +140,18 @@ test('the homepage fits the viewport and passes automated accessibility checks',
       animations: 'disabled',
     })
   }
+})
+
+test('steps through the engineering demo and accepts terminal commands', async ({
+  page,
+}) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: /Step through/ }).click()
+  await expect(page.locator('.lab-result')).toContainText('processing: true')
+  await page.getByRole('button', { name: /Reset/ }).click()
+  await expect(page.locator('.lab-result')).toContainText('waiting')
+  const command = page.getByRole('textbox', { name: 'Terminal command' })
+  await command.fill('help')
+  await command.press('Enter')
+  await expect(page.locator('.terminal-body')).toContainText('Commands:')
 })

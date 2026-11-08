@@ -1,6 +1,6 @@
 # Deployment
 
-The build is prepared for static hosting on Vercel. There is no confirmed deployment or production URL. The current site has a `noindex` directive while the Figma port is pending.
+The build is prepared for static hosting on Vercel. There is no confirmed deployment or production URL. The current site has a `noindex` directive while release review is pending.
 
 ## Prepare a review build
 

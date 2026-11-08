@@ -1,7 +1,6 @@
 import { createBrowserRouter } from 'react-router'
-import { AppShell } from './AppShell'
-import { HomePage } from './HomePage'
-import { NotFoundPage } from './NotFoundPage'
+import { Home } from '../design/Home'
+import { AppShell } from '../design/Shell'
 import { LoadingPage, RouteErrorPage } from './RouteStatusPages'
 
 export const router = createBrowserRouter([
@@ -10,16 +9,23 @@ export const router = createBrowserRouter([
     ErrorBoundary: RouteErrorPage,
     HydrateFallback: LoadingPage,
     children: [
-      { index: true, Component: HomePage },
+      { index: true, Component: Home },
       {
         path: 'projects/:slug',
-        lazy: () => import('../features/projects/ProjectRoute'),
+        lazy: async () => ({
+          Component: (await import('../design/CaseStudy')).CaseStudy,
+        }),
       },
       {
         path: 'resume',
         lazy: () => import('../features/resume/ResumeRoute'),
       },
-      { path: '*', Component: NotFoundPage },
+      {
+        path: '*',
+        lazy: async () => ({
+          Component: (await import('../design/CaseStudy')).NotFound,
+        }),
+      },
     ],
   },
 ])
