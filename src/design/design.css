@@ -2245,8 +2245,7 @@ em {
   grid-template-columns: 0.25fr 1fr 0.5fr;
   gap: 5vw;
 }
-.case-intro > span,
-.case-content aside > span {
+.case-intro > span {
   font: 8px var(--mono);
   color: #65676d;
 }
@@ -2270,7 +2269,7 @@ em {
   gap: 6vw;
   padding: 130px 8vw;
 }
-.case-content aside {
+.case-toc {
   position: sticky;
   top: 120px;
   align-self: start;
@@ -2278,10 +2277,13 @@ em {
   flex-direction: column;
   gap: 14px;
 }
-.case-content aside > span {
+.case-toc > span {
+  font: 8px var(--mono);
+  color: var(--muted);
   margin-bottom: 12px;
+  text-transform: uppercase;
 }
-.case-content aside a {
+.case-toc a {
   font: 10px var(--mono);
   color: #868d9c;
 }
@@ -2297,6 +2299,8 @@ em {
   color: var(--project);
 }
 .case-block h2 {
+  scroll-margin-top: 100px;
+  outline-offset: 5px;
   font-size: 42px;
   letter-spacing: -0.05em;
   margin-bottom: 35px;
@@ -2595,8 +2599,17 @@ em {
   .case-content {
     grid-template-columns: 1fr;
   }
-  .case-content aside {
-    display: none;
+  .case-toc {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .case-toc > span {
+    flex-basis: 100%;
+    margin-bottom: 0;
+  }
+  .case-toc a {
+    padding-block: 8px;
   }
   .architecture {
     flex-direction: column;
