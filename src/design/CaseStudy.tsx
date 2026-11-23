@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
-import { Link, useParams } from 'react-router'
+import { Link, useLocation, useParams } from 'react-router'
 import { projects } from './data'
 
 import { usePageMetadata } from '../app/use-page-metadata'
@@ -7,6 +7,7 @@ import { Github } from './Icons'
 import { ProjectVisual } from './ProjectVisual'
 export function CaseStudy() {
   const { slug } = useParams()
+  const { search } = useLocation()
   const project = projects.find((p) => p.slug === slug)
   usePageMetadata(
     project
@@ -46,16 +47,16 @@ export function CaseStudy() {
         </div>
       </section>
       <section className="case-content">
-        <aside>
-          <span>ON THIS PAGE</span>
+        <nav className="case-toc" aria-labelledby="case-toc-label">
+          <span id="case-toc-label">On this page</span>
           {['Problem', 'Features', 'Architecture', 'Testing', 'Learnings'].map(
             (x) => (
-              <a key={x} href={`#${x.toLowerCase()}`}>
+              <Link key={x} to={{ search, hash: `#${x.toLowerCase()}` }}>
                 {x}
-              </a>
+              </Link>
             ),
           )}
-        </aside>
+        </nav>
         <div>
           <CaseBlock id="problem" index="01" title="Problem being addressed">
             <p>
@@ -141,9 +142,11 @@ function CaseBlock({
   children: React.ReactNode
 }) {
   return (
-    <article id={id} className="case-block">
+    <article className="case-block">
       <span>{index}</span>
-      <h2>{title}</h2>
+      <h2 id={id} tabIndex={-1}>
+        {title}
+      </h2>
       {children}
     </article>
   )

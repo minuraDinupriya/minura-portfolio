@@ -50,6 +50,30 @@ test('loads a deep link on refresh and handles an unknown case study', async ({
   ).toBeVisible()
 })
 
+test('case study section links move focus and support browser history', async ({
+  page,
+}) => {
+  await page.goto('/projects/tradesphere?ref=portfolio#architecture')
+
+  const architecture = page.getByRole('heading', { name: 'Architecture' })
+  const testing = page.getByRole('heading', { name: 'Testing & workflows' })
+  await expect(architecture).toBeFocused()
+  await expect(architecture).toBeInViewport()
+
+  const sectionLinks = page.getByRole('navigation', { name: 'On this page' })
+  const testingLink = sectionLinks.getByRole('link', { name: 'Testing' })
+  await expect(testingLink).toBeVisible()
+  await testingLink.press('Enter')
+  await expect(page).toHaveURL('/projects/tradesphere?ref=portfolio#testing')
+  await expect(testing).toBeFocused()
+  await expect(testing).toBeInViewport()
+
+  await page.goBack()
+  await expect(architecture).toBeFocused()
+  await page.goForward()
+  await expect(testing).toBeFocused()
+})
+
 test('the résumé is downloadable and contact actions use the correct destinations', async ({
   page,
 }) => {
