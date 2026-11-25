@@ -74,6 +74,25 @@ test('case study section links move focus and support browser history', async ({
   await expect(testing).toBeFocused()
 })
 
+test('reopening the current case study section returns focus to its heading', async ({
+  page,
+}) => {
+  await page.goto('/projects/tradesphere#architecture')
+
+  const heading = page.getByRole('heading', { name: 'Architecture' })
+  await expect(heading).toBeFocused()
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
+  await expect(heading).not.toBeInViewport()
+
+  const sectionLink = page
+    .getByRole('navigation', { name: 'On this page' })
+    .getByRole('link', { name: 'Architecture' })
+  await sectionLink.press('Enter')
+
+  await expect(heading).toBeFocused()
+  await expect(heading).toBeInViewport()
+})
+
 test('the résumé is downloadable and contact actions use the correct destinations', async ({
   page,
 }) => {
