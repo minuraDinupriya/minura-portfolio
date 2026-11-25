@@ -98,15 +98,17 @@ function Cursor() {
 }
 
 export function AppShell() {
-  const location = useLocation()
+  const { pathname, hash, key } = useLocation()
+  const fragmentNavigationKey = hash ? key : undefined
+
   useEffect(() => {
-    if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' })
+    if (!hash) window.scrollTo({ top: 0, behavior: 'instant' })
     else {
-      const target = document.getElementById(location.hash.slice(1))
+      const target = document.getElementById(hash.slice(1))
       target?.scrollIntoView()
       target?.focus({ preventScroll: true })
     }
-  }, [location.pathname, location.hash])
+  }, [pathname, hash, fragmentNavigationKey])
   return (
     <>
       <a className="skip-link" href="#main">
