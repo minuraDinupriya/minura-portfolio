@@ -1,6 +1,31 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
+test('the skip link moves keyboard focus to the main content on every route', async ({
+  page,
+}) => {
+  for (const path of [
+    '/',
+    '/projects/tradesphere',
+    '/resume',
+    '/not-a-route',
+  ]) {
+    await test.step(path, async () => {
+      await page.goto(path)
+      const main = page.getByRole('main')
+      await expect(main).toBeVisible()
+
+      await page.keyboard.press('Tab')
+      const skipLink = page.getByRole('link', { name: 'Skip to content' })
+      await expect(skipLink).toBeFocused()
+
+      await page.keyboard.press('Enter')
+      await expect(main).toBeFocused()
+      await expect(page).toHaveURL(/#main$/)
+    })
+  }
+})
+
 test('opens a case study from the homepage and preserves browser history', async ({
   page,
 }) => {
