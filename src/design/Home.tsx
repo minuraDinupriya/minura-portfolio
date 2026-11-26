@@ -22,7 +22,7 @@ export function Home() {
     return () => observer.disconnect()
   }, [])
   return (
-    <main id="main">
+    <main id="main" tabIndex={-1}>
       <Intro />
       <Hero />
       <About />

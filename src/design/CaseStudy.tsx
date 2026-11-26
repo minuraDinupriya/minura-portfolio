@@ -19,6 +19,7 @@ export function CaseStudy() {
   return (
     <main
       id="main"
+      tabIndex={-1}
       className="case-study"
       style={{ '--project': project.color } as React.CSSProperties}
     >
@@ -154,7 +155,7 @@ function CaseBlock({
 
 export function NotFound() {
   return (
-    <main className="not-found" id="main">
+    <main className="not-found" id="main" tabIndex={-1}>
       <span>404 / LOST NODE</span>
       <h1>
         This route left
