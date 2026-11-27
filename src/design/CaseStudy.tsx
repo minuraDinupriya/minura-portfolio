@@ -1,21 +1,21 @@
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
 import { Link, useLocation, useParams } from 'react-router'
-import { projects } from './data'
+import { projects, type Project } from './data'
 
 import { usePageMetadata } from '../app/use-page-metadata'
+import { profile } from '../content/profile'
 import { Github } from './Icons'
 import { ProjectVisual } from './ProjectVisual'
 export function CaseStudy() {
   const { slug } = useParams()
-  const { search } = useLocation()
   const project = projects.find((p) => p.slug === slug)
-  usePageMetadata(
-    project
-      ? project.title + ' | Minura Ranaweera'
-      : 'Page not found | Minura Ranaweera',
-    project?.description,
-  )
-  if (!project) return <NotFound />
+  return project ? <ProjectCaseStudy project={project} /> : <NotFound />
+}
+
+function ProjectCaseStudy({ project }: { project: Project }) {
+  const { search } = useLocation()
+  usePageMetadata(project.title + ' | ' + profile.name, project.description)
+
   return (
     <main
       id="main"
@@ -154,6 +154,11 @@ function CaseBlock({
 }
 
 export function NotFound() {
+  usePageMetadata(
+    'Page not found | ' + profile.name,
+    'This portfolio page is unavailable.',
+  )
+
   return (
     <main className="not-found" id="main" tabIndex={-1}>
       <span>404 / LOST NODE</span>

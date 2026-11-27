@@ -56,23 +56,35 @@ test('opens a case study from the homepage and preserves browser history', async
   ).toBeVisible()
 })
 
-test('loads a deep link on refresh and handles an unknown case study', async ({
-  page,
-}) => {
+test('loads a case study deep link on refresh', async ({ page }) => {
   await page.goto('/projects/focuspilot')
   const heading = page.getByRole('heading', { level: 1, name: 'FocusPilot' })
   await expect(heading).toBeVisible()
   await page.reload()
   await expect(heading).toBeVisible()
+  await expect(page).toHaveTitle('FocusPilot | Minura Ranaweera')
+})
 
-  await page.goto('/projects/not-a-project')
-  await expect(
-    page.getByRole('heading', { name: /This route left/ }),
-  ).toBeVisible()
-  await page.getByRole('link', { name: 'Return to portfolio' }).click()
-  await expect(
-    page.getByRole('heading', { level: 1, name: /Minura\s*Ranaweera/i }),
-  ).toBeVisible()
+test('missing pages set their own metadata and link back to the portfolio', async ({
+  page,
+}) => {
+  for (const path of ['/not-a-route', '/projects/not-a-project']) {
+    await test.step(path, async () => {
+      await page.goto(path)
+      await expect(
+        page.getByRole('heading', { name: /This route left/ }),
+      ).toBeVisible()
+      await expect(page).toHaveTitle('Page not found | Minura Ranaweera')
+      await expect(page.locator('meta[name="description"]')).toHaveAttribute(
+        'content',
+        'This portfolio page is unavailable.',
+      )
+      await page.getByRole('link', { name: 'Return to portfolio' }).click()
+      await expect(page).toHaveTitle(
+        'Minura Ranaweera | Software Engineering Portfolio',
+      )
+    })
+  }
 })
 
 test('case study section links move focus and support browser history', async ({
