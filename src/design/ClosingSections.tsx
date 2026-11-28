@@ -82,7 +82,7 @@ export function Behind() {
 
 export function Contact() {
   return (
-    <section id="contact" className="contact">
+    <section id="contact" tabIndex={-1} className="contact">
       <div className="contact-orbit" />
       <span>AVAILABLE FOR INTERNSHIPS · JANUARY 2027</span>
       <h2>

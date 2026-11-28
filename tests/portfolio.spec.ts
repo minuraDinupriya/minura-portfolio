@@ -189,6 +189,35 @@ test('the narrow-screen menu opens with the keyboard, closes with Escape, and na
   await expect(page.locator('#expertise')).toBeFocused()
 })
 
+test('homepage section links move keyboard focus to their destinations', async ({
+  page,
+}, testInfo) => {
+  await page.goto('/resume')
+  const isDesktop = testInfo.project.name === 'desktop'
+  const navigation = page.getByRole('navigation', {
+    name: isDesktop ? 'Primary' : 'Mobile',
+  })
+
+  for (const name of ['About', 'Experience', 'Contact']) {
+    await test.step(name, async () => {
+      if (!isDesktop) {
+        await page.getByRole('button', { name: 'Open menu' }).press('Enter')
+        await expect(
+          page.getByRole('button', { name: 'Close menu' }),
+        ).toBeFocused()
+      }
+      const link = navigation.getByRole('link', { name })
+      await link.focus()
+      await expect(link).toBeFocused()
+      await page.keyboard.press('Enter')
+
+      const hash = `#${name.toLowerCase()}`
+      await expect(page).toHaveURL(`/${hash}`)
+      await expect(page.locator(`section${hash}`)).toBeFocused()
+    })
+  }
+})
+
 test('the homepage fits the viewport and passes automated accessibility checks', async ({
   page,
 }, testInfo) => {

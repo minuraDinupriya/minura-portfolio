@@ -3,7 +3,7 @@ import { CoreVisual } from './Hero'
 import { SectionHead } from './SectionHead'
 export function About() {
   return (
-    <section id="about" className="section about">
+    <section id="about" tabIndex={-1} className="section about">
       <SectionHead
         index="01"
         label="THE ENGINEER"

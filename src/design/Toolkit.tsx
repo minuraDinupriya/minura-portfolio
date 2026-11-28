@@ -97,7 +97,7 @@ export function Constellation() {
 
 export function Journey() {
   return (
-    <section id="experience" className="section journey">
+    <section id="experience" tabIndex={-1} className="section journey">
       <SectionHead
         index="05"
         label="EXPERIENCE & EDUCATION"
